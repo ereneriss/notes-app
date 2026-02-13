@@ -20,7 +20,14 @@ export default function Home() {
 
   useEffect(() => {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) setNotes(JSON.parse(raw));
+    if (!raw) return;
+
+    try {
+      const parsed = JSON.parse(raw) as Note[];
+      if (Array.isArray(parsed)) setNotes(parsed);
+    } catch {
+      // ignore
+    }
   }, []);
 
   useEffect(() => {
@@ -28,16 +35,16 @@ export default function Home() {
   }, [notes]);
 
   const addNote = () => {
-    if (!input.trim()) return;
-    setNotes((prev) => [
-      { id: crypto.randomUUID(), text: input },
-      ...prev,
-    ]);
+    const text = input.trim();
+    if (!text) return;
+
+    setNotes((prev) => [{ id: crypto.randomUUID(), text }, ...prev]);
     setInput("");
   };
 
   const deleteNote = (id: string) => {
     setNotes((prev) => prev.filter((n) => n.id !== id));
+    if (editingId === id) cancelEdit();
   };
 
   const startEdit = (note: Note) => {
@@ -45,42 +52,53 @@ export default function Home() {
     setEditingText(note.text);
   };
 
-  const saveEdit = () => {
-    if (!editingId || !editingText.trim()) return;
-    setNotes((prev) =>
-      prev.map((n) =>
-        n.id === editingId ? { ...n, text: editingText } : n
-      )
-    );
+  const cancelEdit = () => {
     setEditingId(null);
     setEditingText("");
   };
 
+  const saveEdit = () => {
+    if (!editingId) return;
+    const text = editingText.trim();
+    if (!text) return;
+
+    setNotes((prev) => prev.map((n) => (n.id === editingId ? { ...n, text } : n)));
+    cancelEdit();
+  };
+
+  const isAddDisabled = input.trim().length === 0;
+
   return (
-    <main className="flex min-h-screen flex-col items-center gap-6 p-10">
-      <h1 className="text-3xl font-bold">Notes App</h1>
+    <main className="min-h-screen bg-white text-black flex flex-col items-center gap-6 p-10">
 
-      <NoteInput
-        value={input}
-        onChange={setInput}
-        onAdd={addNote}
-      />
+      <div className="w-full max-w-xl flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Notes App</h1>
+        <span className="text-sm opacity-60">{notes.length} notes</span>
+      </div>
 
-      <ul className="w-full max-w-xl space-y-2">
-        {notes.map((note) => (
-          <NoteItem
-            key={note.id}
-            note={note}
-            isEditing={editingId === note.id}
-            editingText={editingText}
-            onStartEdit={() => startEdit(note)}
-            onChangeEdit={setEditingText}
-            onSave={saveEdit}
-            onCancel={() => setEditingId(null)}
-            onDelete={() => deleteNote(note.id)}
-          />
-        ))}
-      </ul>
+      <NoteInput value={input} onChange={setInput} onAdd={addNote} disabled={isAddDisabled} />
+
+      {notes.length === 0 ? (
+        <div className="w-full max-w-xl border rounded p-6 text-center opacity-70">
+          No notes yet. Add your first note above.
+        </div>
+      ) : (
+        <ul className="w-full max-w-xl space-y-2">
+          {notes.map((note) => (
+            <NoteItem
+              key={note.id}
+              note={note}
+              isEditing={editingId === note.id}
+              editingText={editingText}
+              onStartEdit={() => startEdit(note)}
+              onChangeEdit={setEditingText}
+              onSave={saveEdit}
+              onCancel={cancelEdit}
+              onDelete={() => deleteNote(note.id)}
+            />
+          ))}
+        </ul>
+      )}
     </main>
   );
 }
