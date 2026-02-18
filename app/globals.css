@@ -24,3 +24,20 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* --- Luxury theme helpers --- */
+:root {
+  --rr-black: #0b0b0c;
+  --rr-ivory: #f7f3ea;
+  --rr-gold: #b89b4f;
+}
+
+html, body {
+  background: var(--rr-black);
+  color: var(--rr-ivory);
+}
+
+::selection {
+  background: var(--rr-gold);
+  color: var(--rr-black);
+}

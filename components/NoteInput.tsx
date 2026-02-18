@@ -11,18 +11,18 @@ export default function NoteInput({ value, onChange, onAdd, disabled }: Props) {
   const isEmpty = value.trim().length === 0;
 
   return (
-    <div className="flex flex-col gap-2 w-full max-w-xl">
+    <div className="flex flex-col gap-3 w-full">
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={(e) => {
-          // Enter: ekle, Shift+Enter: hiçbir şey yapma (ileride multiline istersen)
+          // Enter: add (Shift+Enter: ignore for now)
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             if (!isEmpty && !disabled) onAdd();
           }
         }}
-        className="border px-3 py-2 rounded w-full"
+        className="w-full rounded-xl border border-white/15 bg-black/40 px-4 py-3 text-[color:var(--rr-ivory)] placeholder:text-white/35 outline-none focus:border-[color:var(--rr-gold)] focus:ring-2 focus:ring-[color:var(--rr-gold)]/20"
         placeholder="Write a note... (Enter to add)"
       />
 
@@ -30,13 +30,13 @@ export default function NoteInput({ value, onChange, onAdd, disabled }: Props) {
         <button
           onClick={onAdd}
           disabled={disabled || isEmpty}
-          className="bg-black text-white px-4 py-2 rounded disabled:opacity-40 disabled:cursor-not-allowed"
+          className="rounded-xl border border-[color:var(--rr-gold)] bg-[color:var(--rr-gold)] px-5 py-3 text-[color:var(--rr-black)] font-semibold tracking-wide disabled:opacity-40 disabled:cursor-not-allowed hover:brightness-105 active:brightness-95"
         >
           Add
         </button>
 
-        <span className="text-sm opacity-60">
-          {isEmpty ? "Type something to add." : "Enter to add • Shift+Enter ignored"}
+        <span className="text-sm text-white/55">
+          {isEmpty ? "Type something to add." : "Enter to add • Esc cancels edit"}
         </span>
       </div>
     </div>

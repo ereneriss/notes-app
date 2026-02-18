@@ -69,36 +69,60 @@ export default function Home() {
   const isAddDisabled = input.trim().length === 0;
 
   return (
-    <main className="min-h-screen bg-white text-black flex flex-col items-center gap-6 p-10">
+  <main className="min-h-screen bg-[radial-gradient(80%_60%_at_50%_0%,rgba(184,155,79,0.20),transparent_60%)]">
+    <div className="mx-auto max-w-3xl px-6 py-10">
+      {/* Header */}
+      <div className="mb-8 flex items-end justify-between border-b border-white/10 pb-4">
+        <div>
+          <p className="text-xs tracking-[0.35em] text-white/60">HANDCRAFTED NOTES</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight">
+            Notes Suite
+          </h1>
+        </div>
 
-      <div className="w-full max-w-xl flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Notes App</h1>
-        <span className="text-sm opacity-60">{notes.length} notes</span>
+        <div className="text-right">
+          <p className="text-xs text-white/60">Total</p>
+          <p className="text-sm font-medium">
+            <span className="text-[color:var(--rr-gold)]">{notes.length}</span> notes
+          </p>
+        </div>
       </div>
 
-      <NoteInput value={input} onChange={setInput} onAdd={addNote} disabled={isAddDisabled} />
+      {/* Input + List */}
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.55)] backdrop-blur">
+        <NoteInput value={input} onChange={setInput} onAdd={addNote} disabled={isAddDisabled} />
 
-      {notes.length === 0 ? (
-        <div className="w-full max-w-xl border rounded p-6 text-center opacity-70">
-          No notes yet. Add your first note above.
+        <div className="mt-6">
+          {notes.length === 0 ? (
+            <div className="rounded-xl border border-white/10 bg-black/30 p-6 text-center text-white/70">
+              No notes yet. Add your first note above.
+            </div>
+          ) : (
+            <ul className="space-y-3">
+              {notes.map((note) => (
+                <NoteItem
+                  key={note.id}
+                  note={note}
+                  isEditing={editingId === note.id}
+                  editingText={editingText}
+                  onStartEdit={() => startEdit(note)}
+                  onChangeEdit={setEditingText}
+                  onSave={saveEdit}
+                  onCancel={cancelEdit}
+                  onDelete={() => deleteNote(note.id)}
+                />
+              ))}
+            </ul>
+          )}
         </div>
-      ) : (
-        <ul className="w-full max-w-xl space-y-2">
-          {notes.map((note) => (
-            <NoteItem
-              key={note.id}
-              note={note}
-              isEditing={editingId === note.id}
-              editingText={editingText}
-              onStartEdit={() => startEdit(note)}
-              onChangeEdit={setEditingText}
-              onSave={saveEdit}
-              onCancel={cancelEdit}
-              onDelete={() => deleteNote(note.id)}
-            />
-          ))}
-        </ul>
-      )}
-    </main>
-  );
+      </div>
+
+      {/* Footer microcopy */}
+      <p className="mt-6 text-center text-xs text-white/40">
+        Minimal UI • High contrast • Gold accents
+      </p>
+    </div>
+  </main>
+);
+
 }
