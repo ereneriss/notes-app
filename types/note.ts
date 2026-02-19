@@ -4,4 +4,5 @@ export type Note = {
   body: string;
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
+  isPinned: boolean;
 };

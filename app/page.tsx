@@ -44,6 +44,7 @@ export default function Home() {
       body: b,
       createdAt: now,
       updatedAt: now,
+      isPinned: false,
     };
 
     setNotes((prev) => [newNote, ...prev]);
@@ -54,6 +55,15 @@ export default function Home() {
   const deleteNote = (id: string) => {
     setNotes((prev) => prev.filter((n) => n.id !== id));
     if (editingId === id) cancelEdit();
+  };
+
+  const togglePin = (id: string) => {
+    const now = new Date().toISOString();
+    setNotes((prev) =>
+      prev.map((n) =>
+        n.id === id ? { ...n, isPinned: !n.isPinned, updatedAt: now } : n
+      )
+    );
   };
 
   const startEdit = (note: Note) => {
@@ -110,6 +120,10 @@ export default function Home() {
           });
 
     const sorted = [...filtered].sort((a, b) => {
+      // 1) pinned always first
+      if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+
+      // 2) then apply selected sort
       if (sort === "updated_desc") {
         return (
           new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
@@ -193,6 +207,7 @@ export default function Home() {
                     onSave={saveEdit}
                     onCancel={cancelEdit}
                     onDelete={() => deleteNote(note.id)}
+                    onTogglePin={() => togglePin(note.id)}
                   />
                 ))}
               </ul>

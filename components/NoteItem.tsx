@@ -10,6 +10,8 @@ type Props = {
   editingBody: string;
 
   onStartEdit: () => void;
+  onTogglePin: () => void;
+
   onChangeEditTitle: (value: string) => void;
   onChangeEditBody: (value: string) => void;
 
@@ -30,6 +32,7 @@ export default function NoteItem({
   editingTitle,
   editingBody,
   onStartEdit,
+  onTogglePin,
   onChangeEditTitle,
   onChangeEditBody,
   onSave,
@@ -44,10 +47,17 @@ export default function NoteItem({
       <li className="rounded-2xl border border-white/10 bg-black/35 p-4 text-[color:var(--rr-ivory)] shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <h3 className="font-semibold tracking-tight truncate">
                 {note.title || "Untitled"}
               </h3>
+
+              {note.isPinned && (
+                <span className="text-xs px-2 py-1 rounded bg-[color:var(--rr-gold)] text-[color:var(--rr-black)] tracking-[0.2em]">
+                  PINNED
+                </span>
+              )}
+
               <span className="text-xs text-white/40">
                 {formatDate(note.updatedAt)}
               </span>
@@ -59,6 +69,13 @@ export default function NoteItem({
           </div>
 
           <div className="flex items-center gap-4 shrink-0">
+            <button
+              onClick={onTogglePin}
+              className="text-sm underline decoration-white/30 underline-offset-4 hover:decoration-[color:var(--rr-gold)]"
+            >
+              {note.isPinned ? "Unpin" : "Pin"}
+            </button>
+
             <button
               onClick={onStartEdit}
               className="text-sm underline decoration-white/30 underline-offset-4 hover:decoration-[color:var(--rr-gold)]"
@@ -121,4 +138,3 @@ export default function NoteItem({
     </li>
   );
 }
-
