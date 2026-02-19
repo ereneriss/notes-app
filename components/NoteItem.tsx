@@ -1,36 +1,62 @@
 "use client";
 
-type Note = {
-  id: string;
-  text: string;
-};
+import type { Note } from "@/types/note";
 
 type Props = {
   note: Note;
   isEditing: boolean;
-  editingText: string;
+
+  editingTitle: string;
+  editingBody: string;
+
   onStartEdit: () => void;
-  onChangeEdit: (value: string) => void;
+  onChangeEditTitle: (value: string) => void;
+  onChangeEditBody: (value: string) => void;
+
   onSave: () => void;
   onCancel: () => void;
   onDelete: () => void;
 };
 
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString();
+}
+
 export default function NoteItem({
   note,
   isEditing,
-  editingText,
+  editingTitle,
+  editingBody,
   onStartEdit,
-  onChangeEdit,
+  onChangeEditTitle,
+  onChangeEditBody,
   onSave,
   onCancel,
   onDelete,
 }: Props) {
   if (!isEditing) {
+    const snippet =
+      note.body.length > 120 ? note.body.slice(0, 120).trimEnd() + "…" : note.body;
+
     return (
       <li className="rounded-2xl border border-white/10 bg-black/35 p-4 text-[color:var(--rr-ivory)] shadow-sm">
-        <div className="flex items-center justify-between gap-4">
-          <span className="break-words">{note.text}</span>
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <div className="flex items-center gap-3">
+              <h3 className="font-semibold tracking-tight truncate">
+                {note.title || "Untitled"}
+              </h3>
+              <span className="text-xs text-white/40">
+                {formatDate(note.updatedAt)}
+              </span>
+            </div>
+
+            {note.body.trim().length > 0 && (
+              <p className="mt-2 text-sm text-white/70 break-words">{snippet}</p>
+            )}
+          </div>
 
           <div className="flex items-center gap-4 shrink-0">
             <button
@@ -58,18 +84,23 @@ export default function NoteItem({
         <span className="px-2 py-1 rounded bg-[color:var(--rr-gold)] text-[color:var(--rr-black)] text-xs font-semibold tracking-[0.2em]">
           EDITING
         </span>
-        <span className="text-xs text-white/60">Enter: save • Esc: cancel</span>
+        <span className="text-xs text-white/60">Esc: cancel</span>
       </div>
 
       <input
-        value={editingText}
-        onChange={(e) => onChangeEdit(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") onSave();
-          if (e.key === "Escape") onCancel();
-        }}
+        value={editingTitle}
+        onChange={(e) => onChangeEditTitle(e.target.value)}
         className="w-full rounded-xl border border-white/15 bg-black/60 px-4 py-3 text-[color:var(--rr-ivory)] outline-none focus:border-[color:var(--rr-gold)] focus:ring-2 focus:ring-[color:var(--rr-gold)]/20"
+        placeholder="Title"
         autoFocus
+      />
+
+      <textarea
+        value={editingBody}
+        onChange={(e) => onChangeEditBody(e.target.value)}
+        rows={4}
+        className="mt-3 w-full resize-none rounded-xl border border-white/15 bg-black/60 px-4 py-3 text-[color:var(--rr-ivory)] outline-none focus:border-[color:var(--rr-gold)] focus:ring-2 focus:ring-[color:var(--rr-gold)]/20"
+        placeholder="Body"
       />
 
       <div className="flex gap-3 mt-3">
@@ -90,3 +121,4 @@ export default function NoteItem({
     </li>
   );
 }
+
