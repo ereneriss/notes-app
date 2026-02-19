@@ -1,32 +1,79 @@
-# Notes App
+# Notes Suite
 
-A simple notes application built to learn the fundamentals of React and Next.js.
+A minimal, premium notes application focused on clarity, speed, and thoughtful writing.
 
-## Features
-- Add, edit and delete notes
-- Persistent data using browser localStorage
-- Component-based architecture
-- Responsive UI with Tailwind CSS
+Notes Suite is designed as a calm, distraction-free space for capturing and refining ideas — not as a complex productivity system.
 
-## Tech Stack
+---
+
+## ✨ Features
+
+- Create, edit, and delete notes
+- Title + body note structure
+- Automatic timestamps (created / updated)
+- Search and sort notes
+- Local persistence using browser storage
+- High-contrast, luxury-inspired UI
+
+---
+
+## 🎯 Design Philosophy
+
+This app intentionally prioritizes:
+- Simplicity over features
+- Clarity over density
+- Thoughtful interaction over speed hacks
+
+Every feature is added only if it improves focus and reduces friction.
+
+---
+
+## ❌ What This App Is *Not*
+
+To keep the product focused, the following are **intentionally excluded**:
+
+- Real-time collaboration
+- Rich text or markdown editor
+- Task or to-do management
+- Cloud sync (for now)
+- Notifications or reminders
+
+---
+
+## 🧠 Intended Use
+
+- Personal note-taking
+- Drafting ideas and thoughts
+- Lightweight daily writing
+- A calm alternative to feature-heavy note apps
+
+---
+
+## 🛠 Tech Stack
+
 - Next.js (App Router)
 - React
 - TypeScript
 - Tailwind CSS
-- localStorage
+- Browser localStorage
+- Vercel (deployment)
 
-## Purpose
-This project was built as a learning side project to:
-- Understand React state and effects
-- Practice component decomposition
-- Learn basic Git and deployment workflows
-- Build a complete project from scratch
+---
 
-## Live Demo
-https://notes-app-eight-lilac.vercel.app/
+## 🚧 Roadmap
 
-## Future Improvements
-- Backend integration (Supabase)
+### Phase 1 (Current)
+- Core notes experience
+- Visual polish and UX clarity
+- Pin / favorite notes
+
+### Phase 2
+- Backend integration
 - Authentication
-- Cloud database
-- Better UX and animations
+- Cross-device sync
+
+---
+
+## 📦 Status
+
+This project is actively evolving and intentionally developed step by step with a focus on quality and learning.
